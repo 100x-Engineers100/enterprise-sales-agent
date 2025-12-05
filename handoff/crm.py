@@ -16,6 +16,9 @@ class CRMHandler:
         self.salesforce_password = os.getenv("SALESFORCE_PASSWORD")
         self.salesforce_security_token = os.getenv("SALESFORCE_SECURITY_TOKEN")
         self.salesforce_instance_url = os.getenv("SALESFORCE_INSTANCE_URL")
+        self.pipedrive_api_key = os.getenv("PIPEDRIVE_API_KEY")
+        self.pipedrive_company_domain = os.getenv("PIPEDRIVE_COMPANY_DOMAIN")
+        self.pipedrive_default_stage_id = os.getenv("PIPEDRIVE_DEFAULT_STAGE_ID")
         self.learning_engine = learning_engine
         self.supported_crm_providers = ['salesforce', 'hubspot', 'pipedrive']
         self.default_provider = 'salesforce'
@@ -39,9 +42,188 @@ class CRMHandler:
             return self._create_salesforce_deal(lead)
         elif provider == 'hubspot':
             return self._create_hubspot_deal(lead)
+        elif provider == 'pipedrive':
+            return self._create_pipedrive_deal(lead)
         else:
             logger.error(f"Unsupported CRM provider: {provider}")
             return {"deal_created": False, "message": f"Unsupported CRM provider: {provider}"}
+
+    def _create_pipedrive_deal(self, lead: Dict) -> Dict:
+        """Pipedrive API integration for creating deals."""
+        logger.info(f"Attempting to create Pipedrive deal for {lead.get('company_name')}")
+        if not self.pipedrive_api_key or not self.pipedrive_company_domain:
+            logger.error("Pipedrive API key or company domain not set.")
+            return {"deal_created": False, "message": "Pipedrive API key or company domain not set."}
+
+        pipedrive_api_url = f"https://{self.pipedrive_company_domain}.pipedrive.com/api/v1/deals?api_token={self.pipedrive_api_key}"
+
+        # 1. Find or create Organization
+        organization_id = None
+        organization_name = lead.get('company_name')
+        if organization_name:
+            org_search_url = f"https://{self.pipedrive_company_domain}.pipedrive.com/api/v1/organizations/find?term={organization_name}&api_token={self.pipedrive_api_key}"
+            try:
+                org_search_response = requests.get(org_search_url, timeout=15)
+                org_search_response.raise_for_status()
+                org_search_results = org_search_response.json()
+                if org_search_results and org_search_results['data']:
+                    organization_id = org_search_results['data'][0]['id']
+                    logger.info(f"Found existing Pipedrive organization: {organization_name} (ID: {organization_id})")
+                else:
+                    org_create_url = f"https://{self.pipedrive_company_domain}.pipedrive.com/api/v1/organizations?api_token={self.pipedrive_api_key}"
+                    org_create_payload = {"name": organization_name}
+                    org_create_response = requests.post(org_create_url, json=org_create_payload, timeout=15)
+                    org_create_response.raise_for_status()
+                    organization_id = org_create_response.json()['data']['id']
+                    logger.info(f"Created new Pipedrive organization: {organization_name} (ID: {organization_id})")
+            except requests.exceptions.RequestException as e:
+                logger.error(f"Pipedrive organization handling failed: {str(e)}")
+                return {"deal_created": False, "message": f"Pipedrive organization handling failed: {str(e)}"}
+
+        # 2. Find or create Person (Contact)
+        person_id = None
+        person_name = lead.get('contact_name')
+        person_email = lead.get('email')
+        if person_name and person_email:
+            person_search_url = f"https://{self.pipedrive_company_domain}.pipedrive.com/api/v1/persons/find?term={person_email}&search_by_email=1&api_token={self.pipedrive_api_key}"
+            try:
+                person_search_response = requests.get(person_search_url, timeout=15)
+                person_search_response.raise_for_status()
+                person_search_results = person_search_response.json()
+                if person_search_results and person_search_results['data']:
+                    person_id = person_search_results['data'][0]['id']
+                    logger.info(f"Found existing Pipedrive person: {person_name} (ID: {person_id})")
+                else:
+                    person_create_url = f"https://{self.pipedrive_company_domain}.pipedrive.com/api/v1/persons?api_token={self.pipedrive_api_key}"
+                    person_create_payload = {
+                        "name": person_name,
+                        "email": [{"value": person_email, "primary": True, "label": "work"}],
+                        "org_id": organization_id
+                    }
+                    person_create_response = requests.post(person_create_url, json=person_create_payload, timeout=15)
+                    person_create_response.raise_for_status()
+                    person_id = person_create_response.json()['data']['id']
+                    logger.info(f"Created new Pipedrive person: {person_name} (ID: {person_id})")
+            except requests.exceptions.RequestException as e:
+                logger.error(f"Pipedrive person handling failed: {str(e)}")
+                return {"deal_created": False, "message": f"Pipedrive person handling failed: {str(e)}"}
+
+        # 3. Create Deal
+        if not person_id:
+            logger.error("Cannot create Pipedrive deal without a person.")
+            return {"deal_created": False, "message": "Cannot create Pipedrive deal without a person."}
+
+        deal_payload = {
+            "title": f"Discovery Call - {lead.get('company_name')}",
+            "value": float(str(lead.get('financials', {}).get('revenue_range', '0')).replace('-', '').split(' ')[0]) if str(lead.get('financials', {}).get('revenue_range', '0')).replace('-', '').split(' ')[0].isdigit() else 0.0,
+            "currency": "USD", # Assuming USD as default currency
+            "user_id": None, # Assign to authenticated user by default
+            "person_id": person_id,
+            "org_id": organization_id,
+            "stage_id": self.pipedrive_default_stage_id,
+            "status": "open",
+            "lead_source": lead.get('company_fit', {}).get('source', 'Enterprise Sales Agent')
+        }
+
+        try:
+            deal_response = requests.post(pipedrive_api_url, json=deal_payload, timeout=15)
+            deal_response.raise_for_status()
+            pipedrive_deal = deal_response.json()
+            deal_id = pipedrive_deal['data']['id']
+            deal_link = f"https://{self.pipedrive_company_domain}.pipedrive.com/deal/{deal_id}"
+
+            logger.info(f"Successfully created Pipedrive deal for {lead.get('contact_name')} at {lead.get('company_name')} (ID: {deal_id})")
+            return {"deal_created": True, "deal_details": pipedrive_deal, "deal_link": deal_link}
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Failed to create Pipedrive deal: {str(e)}")
+            return {"deal_created": False, "message": f"Failed to create Pipedrive deal: {str(e)}"}
+
+    def _create_salesforce_deal(self, lead: Dict) -> Dict:
+        """Pipedrive API integration for creating deals."""
+        logger.info(f"Attempting to create Pipedrive deal for {lead.get('company_name')}")
+        pipedrive_api_url = f"https://{self.pipedrive_company_domain}.pipedrive.com/api/v1/deals?api_token={self.pipedrive_api_key}"
+        
+        # Pipedrive requires an organization and person to be associated with a deal.
+        # For simplicity, we'll create them if they don't exist, or use existing ones.
+        # This is a simplified approach; a robust integration would involve more sophisticated matching.
+
+        # 1. Find or create Organization
+        organization_id = None
+        organization_name = lead.get('company_name')
+        if organization_name:
+            org_search_url = f"https://{self.pipedrive_company_domain}.pipedrive.com/api/v1/organizations/find?term={organization_name}&api_token={self.pipedrive_api_key}"
+            try:
+                org_search_response = requests.get(org_search_url, timeout=15)
+                org_search_response.raise_for_status()
+                org_search_results = org_search_response.json()
+                if org_search_results and org_search_results['data']:
+                    organization_id = org_search_results['data'][0]['id']
+                    logger.info(f"Found existing Pipedrive organization: {organization_name} (ID: {organization_id})")
+                else:
+                    org_create_url = f"https://{self.pipedrive_company_domain}.pipedrive.com/api/v1/organizations?api_token={self.pipedrive_api_key}"
+                    org_create_payload = {"name": organization_name}
+                    org_create_response = requests.post(org_create_url, json=org_create_payload, timeout=15)
+                    org_create_response.raise_for_status()
+                    organization_id = org_create_response.json()['data']['id']
+                    logger.info(f"Created new Pipedrive organization: {organization_name} (ID: {organization_id})")
+            except requests.exceptions.RequestException as e:
+                logger.error(f"Pipedrive organization handling failed: {str(e)}")
+                return {"deal_created": False, "message": f"Pipedrive organization handling failed: {str(e)}"}
+
+        # 2. Find or create Person
+        person_id = None
+        person_name = lead.get('contact_name')
+        person_email = lead.get('email')
+        if person_name and person_email:
+            person_search_url = f"https://{self.pipedrive_company_domain}.pipedrive.com/api/v1/persons/find?term={person_email}&search_by_email=1&api_token={self.pipedrive_api_key}"
+            try:
+                person_search_response = requests.get(person_search_url, timeout=15)
+                person_search_response.raise_for_status()
+                person_search_results = person_search_response.json()
+                if person_search_results and person_search_results['data']:
+                    person_id = person_search_results['data'][0]['id']
+                    logger.info(f"Found existing Pipedrive person: {person_name} (ID: {person_id})")
+                else:
+                    person_create_url = f"https://{self.pipedrive_company_domain}.pipedrive.com/api/v1/persons?api_token={self.pipedrive_api_key}"
+                    person_create_payload = {"name": person_name, "email": [{"value": person_email, "primary": True, "label": "work"}]}
+                    if organization_id:
+                        person_create_payload["org_id"] = organization_id
+                    person_create_response = requests.post(person_create_url, json=person_create_payload, timeout=15)
+                    person_create_response.raise_for_status()
+                    person_id = person_create_response.json()['data']['id']
+                    logger.info(f"Created new Pipedrive person: {person_name} (ID: {person_id})")
+            except requests.exceptions.RequestException as e:
+                logger.error(f"Pipedrive person handling failed: {str(e)}")
+                return {"deal_created": False, "message": f"Pipedrive person handling failed: {str(e)}"}
+
+        # 3. Create Deal
+        deal_payload = {
+            "title": f"Discovery Call - {lead.get('company_name')}",
+            "value": float(str(lead.get('financials', {}).get('revenue_range', '0')).replace('-', '').split(' ')[0]) if str(lead.get('financials', {}).get('revenue_range', '0')).replace('-', '').split(' ')[0].isdigit() else 0.0,
+            "currency": "USD", # Assuming USD as default currency
+            "user_id": None, # Assign to authenticated user by default
+            "person_id": person_id,
+            "org_id": organization_id,
+            "stage_id": self.pipedrive_default_stage_id,
+            "status": "open",
+            "lead_source": lead.get('company_fit', {}).get('source', 'Enterprise Sales Agent')
+        }
+
+        # Filter out None values
+        deal_payload = {k: v for k, v in deal_payload.items() if v is not None}
+
+        try:
+            response = requests.post(pipedrive_api_url, json=deal_payload, timeout=15)
+            response.raise_for_status()
+            pipedrive_deal = response.json()
+            deal_id = pipedrive_deal['data']['id']
+            deal_link = f"https://{self.pipedrive_company_domain}.pipedrive.com/deal/{deal_id}"
+
+            logger.info(f"Successfully created Pipedrive deal for {lead.get('contact_name')} at {lead.get('company_name')}")
+            return {"deal_created": True, "deal_details": pipedrive_deal, "deal_link": deal_link}
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Failed to create Pipedrive deal: {str(e)}")
+            return {"deal_created": False, "message": str(e)}
 
     def _create_salesforce_deal(self, lead: Dict) -> Dict:
         """Salesforce API integration for creating deals/opportunities using simple_salesforce."""

@@ -3,6 +3,7 @@ import os
 import logging
 from dotenv import load_dotenv
 from serpapi import GoogleSearch
+import uuid
 
 load_dotenv()
 logger = logging.getLogger(__name__)
@@ -174,6 +175,7 @@ class LeadDiscoveryEngine:
         for lead in leads:
             # Map lead fields to ICPScorer's 40/30/20/10 weighting categories (icp/scoring.py:12)
             normalized_lead = {
+                "id": str(uuid.uuid4()), # Generate a unique ID for the lead
                 "company_fit": {
                     "industry_vertical": lead.get("industry", "Unknown"),
                     "company_size": lead.get("employee_count", "Unknown"),

@@ -10,6 +10,7 @@ from qualification.frameworks import QualificationManager
 from engagement.orchestrator import EngagementOrchestrator
 from booking.calendar import MeetingBooker
 from handoff.crm import CRMHandler
+from learning.engine import LearningEngine
 
 # Load environment variables
 load_dotenv()
@@ -31,7 +32,8 @@ class EnterpriseSalesAgent:
         self.qualification_manager = QualificationManager()
         self.engagement_orchestrator = EngagementOrchestrator()
         self.meeting_booker = MeetingBooker()
-        self.crm_handler = CRMHandler()
+        self.learning_engine = LearningEngine()
+        self.crm_handler = CRMHandler(self.learning_engine)
         self.current_stage = "icp_definition"
         self.icp_definition = None
         self.processed_leads = None
