@@ -1,0 +1,1294 @@
+Level 3: Advanced - Enterprise Sales
+Agent
+Mission
+You're building the core sales automation engine for your SaaS product that will help
+B2B companies scale their outbound sales without hiring an army of SDRs (Sales
+Development Representatives). This is a production-ready system that will handle
+real sales conversations, qualify leads, and generate revenue.
+Your customers are:
+●​ B2B SaaS companies wanting to scale outbound sales
+●​ Agencies offering sales-as-a-service
+●​ Startups looking to validate product-market fit
+●​ Sales teams wanting to automate top-of-funnel
+Your Task: Build an "AI Sales Agent" that becomes an autonomous SDR - from finding
+perfect-fit prospects to having intelligent qualification conversations and booking
+meetings with sales-ready leads.
+
+🎯 What Your Product Must Do
+The Complete Sales Agent Workflow
+┌──────────────────────────────────────
+│
+
+ENTERPRISE SALES AGENT
+
+│
+│ Phase 1: Lead Discovery
+│ ├─ Define target persona (ICP)
+│ ├─ Search web for matching companies
+│ ├─ Extract company data & contacts
+
+│ └─ Enrich with additional intelligence
+│
+│ Phase 2: Lead Qualification
+│ ├─ Initial scoring (fit score)
+│ ├─ Research company context
+│ ├─ Identify decision makers
+│ └─ Determine engagement strategy
+│
+│ Phase 3: Engagement (Voice/Text)
+│ ├─ Personalized outreach
+│ ├─ Qualification conversation
+│ ├─ Handle objections
+│ └─ Extract BANT/MEDDIC data
+│
+│ Phase 4: Meeting Booking
+│ ├─ Assess sales-readiness
+│ ├─ Propose meeting times
+│ ├─ Handle scheduling
+│ └─ Send confirmations
+│
+│ Phase 5: Handoff & Learning
+│ ├─ Create deal in CRM
+│ ├─ Brief sales rep
+│ ├─ Analyze conversation quality
+│ └─ Improve from feedback
+└───────────────────────────────────────
+
+Success Metrics for Your Product
+●​ Lead Discovery: Find 50+ qualified leads per target persona
+●​ Qualification Rate: 30%+ of discovered leads meet ICP criteria
+●​ Engagement Rate: 15%+ respond to outreach
+●​ Conversion Rate: 10%+ of engaged leads book meetings
+●​ Sales Acceptance: 80%+ of booked meetings are sales-qualified
+
+●​ Voice Quality: 4.5/5 star natural conversation rating
+●​ Cost Efficiency: <$5 per qualified lead (vs. $50-200 traditional)
+
+📋 Detailed Requirements
+Phase 1: Ideal Customer Profile (ICP) Builder
+Goal: Help users define their perfect customer with precision.
+What to Build:
+1.1 ICP Definition Wizard
+A conversational interface that extracts:
+Company Characteristics:
+Industry & Vertical:
+- Primary industry (SaaS, E-commerce, Manufacturing, etc.)
+- Sub-vertical (B2B SaaS, D2C E-commerce, etc.)
+- Industry excludes (competitors, non-fits)
+
+Company Size:
+- Employee count range (10-50, 50-200, 200-1000, etc.)
+- Revenue range ($1M-$10M, $10M-$50M, etc.)
+- Growth stage (Seed, Series A, B, C, etc.)
+
+Geography:
+- Target countries/regions
+- Timezone considerations
+- Language requirements
+
+Technology Stack:
+- Must-have tools (Salesforce, HubSpot, etc.)
+
+- Nice-to-have tools
+- Technology indicators (cloud-native, API-first, etc.)
+
+Business Model:
+- B2B, B2C, B2B2C
+- Revenue model (subscription, transactional, etc.)
+- Sales motion (PLG, sales-led, hybrid)
+
+Funding & Growth:
+- Funding stage
+- Recent funding events
+- Growth indicators (hiring, expansion)
+Buyer Persona:
+Decision Maker Profile:
+- Job titles (VP Sales, CRO, CEO, etc.)
+- Seniority level
+- Department
+- Reporting structure
+
+Pain Points:
+- Primary challenges they face
+- Current solutions they use
+- Why they'd switch
+- Urgency indicators
+
+Buying Behavior:
+- Decision-making process
+- Typical sales cycle length
+- Budget authority
+- Evaluation criteria
+Engagement Signals:
+
+Intent Signals:
+- Job postings (hiring for X role)
+- Technology changes (new tool adoption)
+- Funding announcements
+- Executive changes
+- Company expansion
+- Product launches
+- Competitive wins/losses
+
+Content Engagement:
+- Website visits
+- Content downloads
+- Event attendance
+- Social media activity
+1.2 ICP Validation & Scoring
+Create a scoring model:
+# Pseudo-code for scoring logic
+ICP_Score = (
+Company_Fit_Score * 0.4 +
+Persona_Fit_Score * 0.3 +
+Intent_Signal_Score * 0.2 +
+Timing_Score * 0.1
+)
+
+# Example scoring criteria
+Company_Fit_Score:
+- Industry match: 25 points
+- Size match: 20 points
+- Geography match: 15 points
+- Tech stack match: 20 points
+- Growth indicators: 20 points
+
+Persona_Fit_Score:
+- Title match: 30 points
+- Seniority match: 25 points
+- Department match: 25 points
+- Authority level: 20 points
+
+Intent_Signal_Score:
+- Recent funding: 30 points
+- Hiring for relevant roles: 25 points
+- Tech stack changes: 20 points
+- Competitor mentions: 15 points
+- Product launches: 10 points
+
+Timing_Score:
+- Fiscal calendar alignment: 30 points
+- Recent trigger events: 40 points
+- Seasonal factors: 30 points
+
+Implementation Guide:
+1.​ Conversational ICP Builder
+○​ Ask one dimension at a time
+○​ Provide industry examples
+○​ Validate responses
+○​ Build ICP progressively
+○​ Show ICP summary for confirmation
+2.​ ICP Quality Checks
+○​ Too broad? (>10M companies match)
+○​ Too narrow? (<100 companies match)
+○​ Suggest adjustments
+○​ Provide market size estimates
+
+3.​ ICP Templates
+○​ Pre-built templates by industry
+○​ Successful ICP examples
+○​ Quick start options
+○​ Customization from template
+
+Phase 2: Lead Discovery Engine
+Goal: Find companies matching the ICP at scale.
+What to Build:
+2.1 Multi-Source Lead Discovery
+Data Sources to Integrate:
+Web Search (Tavily/SerpAPI)​
+​
+Search Strategies:
+- Industry-specific queries
+- Technology stack queries
+- Job posting searches
+- News/announcement searches
+- Company directory searches
+
+Example Queries:
+- "[Industry] companies using [tech stack]"
+- "[Job title] at [industry] companies hiring"
+- "Series A [industry] companies [location]"
+- "[Company size] [industry] software companies"
+1.​ LinkedIn Sales Navigator (optional)​
+Search Filters:
+- Company size
+
+- Industry
+- Geography
+- Technology
+- Recent activity
+- Job postings
+
+Extract:
+- Company name
+- Website
+- Employee count
+- Industry
+- Decision maker profiles
+2.​ Company Databases (Clearbit, ZoomInfo alternatives)​
+1. Enrichment Data:
+- Company details
+- Revenue estimates
+- Funding information
+- Technology stack
+- Social profiles
+- Contact information
+2. GitHub / Product Hunt / G2​
+Technology Signals:
+- GitHub org repositories
+- Product Hunt launches
+- G2 reviews and competitors
+- Tech stack indicators
+3. Job Boards (Indeed, LinkedIn Jobs)​
+Hiring Signals:
+- Relevant job postings
+- Team expansion
+
+- New departments
+- Role requirements
+2.2 Lead Data Extraction & Structuring ​
+For Each Lead, Extract:
+Company Information:
+basic_info:
+- company_name
+- website
+- domain
+- founded_year
+- headquarters_location
+
+firmographic:
+- employee_count
+- employee_count_range
+- revenue_estimate
+- revenue_range
+- industry
+- sub_industry
+
+funding:
+- funding_stage
+- total_funding
+- last_funding_date
+- last_funding_amount
+- investors
+
+technology:
+- tech_stack (array)
+- platforms_used
+- integrations
+
+signals:
+- recent_news (array)
+- job_postings (array)
+- recent_hires
+- product_launches
+- awards_recognition
+
+Contact Information:
+decision_makers:
+- name
+- title
+- department
+- seniority
+- email (if available)
+- linkedin_url
+- work_history
+- education
+- connections
+
+company_contacts:
+- general_email
+- support_email
+- sales_email
+- phone
+- social_profiles
+
+Enrichment Data:
+- competitors
+- similar_companies
+- news_mentions
+- social_media_activity
+- website_traffic_estimate
+- technologies_detected
+
+2.3 Lead Scoring & Prioritization
+Scoring System:
+Total Lead Score =
+ICP_Fit_Score (0-100) +
+Intent_Signal_Score (0-50) +
+Data_Quality_Score (0-30) +
+Timing_Score (0-20)
+
+Maximum Score: 200 points
+
+Priority Buckets:
+- Hot (170-200): Immediate outreach
+- Warm (140-169): Outreach within 48h
+- Cold (100-139): Nurture sequence
+- Disqualified (<100): Archive
+
+Implementation Guidance:
+1.​ Search Strategy Builder​
+
+○​ Convert ICP to search queries
+○​ Generate multiple search variations
+○​ Prioritize data sources
+○​ Handle rate limits
+2.​ Data Extraction Pipeline​
+
+○​ Web scraping with error handling
+○​ API integrations
+○​ Data validation
+
+○​ Duplicate detection
+○​ Data normalization
+3.​ Enrichment Workflow​
+
+○​ Parallel data enrichment
+○​ Waterfall approach (primary → fallback sources)
+○​ Confidence scoring for each data point
+○​ Missing data handling
+4.​ Quality Control​
+
+○​ Validate email formats
+○​ Check website accessibility
+○​ Verify company existence
+○​ Flag suspicious data
+○​ Remove duplicates
+
+Phase 3: Lead Qualification Framework
+Goal: Systematically qualify leads before engagement.
+What to Build:
+3.1 Qualification Framework Selector
+Offer 3 industry-standard frameworks:
+Option A: BANT Framework
+Budget:
+- Has an allocated budget?
+- Budget range?
+- Budget cycle timing?
+- Budget authority level?
+
+Authority:
+- Is this person the decision maker?
+- Who else is involved?
+- What's the approval process?
+- Economic buyer identified?
+
+Need:
+- What problem are they solving?
+- Current solution?
+- Pain severity (1-10)?
+- Impact if not solved?
+
+Timeline:
+- When do they need a solution?
+- What's driving timeline?
+- Any deadlines?
+- Implementation timeline?
+
+Qualification Criteria:
+- All 4 met: Sales Qualified Lead (SQL)
+- 3 met: Marketing Qualified Lead (MQL)
+- 2 or fewer: Nurture
+
+Option B: MEDDIC Framework
+Metrics:
+- What metrics matter?
+- Current performance?
+- Target performance?
+- How is it measured?
+
+Economic Buyer:
+- Who controls the budget?
+
+- Contact established?
+- Their priorities?
+- Decision criteria?
+
+Decision Criteria:
+- Evaluation criteria?
+- Must-haves vs. nice-to-haves?
+- How do they evaluate vendors?
+- Selection process?
+
+Decision Process:
+- Steps in the buying process?
+- Timeline for each step?
+- Who's involved?
+- Approval chain?
+
+Identify Pain:
+- Primary pain points?
+- Business impact?
+- Cost of inaction?
+- Why now?
+
+Champion:
+- Internal advocate identified?
+- Their motivation?
+- Their influence?
+- Our relationship strength?
+
+Qualification Criteria:
+- All 6 identified: High-quality SQL
+- 4-5 identified: SQL
+- 2-3 identified: MQL
+- 0-1 identified: Nurture/Disqualify
+
+Option C: CHAMP Framework
+Challenges:
+- What challenges face?
+- Business impact?
+- Previous solutions tried?
+- Success metrics?
+
+Authority:
+- Decision makers identified?
+- Influencers mapped?
+- Process understood?
+- Champion identified?
+
+Money:
+- Budget available?
+- ROI expectations?
+- Cost of current solution?
+- Funding source?
+
+Prioritization:
+- Where on the priority list?
+- Competing initiatives?
+- Timeline urgency?
+- Consequences of delay?
+
+Qualification Criteria:
+- High priority + authority + money: SQL
+- High priority + authority: MQL
+- Others: Nurture
+
+Option D: Custom Framework Builder
+Allow users to create their own:
+Custom_Qualification_Questions:
+category_1:
+name: "Product Fit"
+questions:
+- "Are they using [competitor]?"
+- "Do they have [specific problem]?"
+- "Are they [size/stage]?"
+scoring_logic: "All yes = 30 points"
+
+category_2:
+name: "Buying Readiness"
+questions:
+- "Active evaluation?"
+- "Budget allocated?"
+- "Timeline < 3 months?"
+scoring_logic: "All yes = 40 points"
+
+category_3:
+name: "Strategic Fit"
+questions:
+- "Strategic priority?"
+- "Executive sponsorship?"
+- "Change initiative?"
+scoring_logic: "All yes = 30 points"
+
+minimum_score_to_qualify: 60
+
+3.2 Pre-Qualification Research
+Before engagement, research each lead:
+
+Automated Research Tasks:
+company_intelligence:
+- Scrape website for value props
+- Identify current tech stack
+- Find recent news/announcements
+- Map competitor mentions
+- Analyze social media presence
+
+decision_maker_research:
+- LinkedIn profile analysis
+- Recent posts/activity
+- Content they engage with
+- Professional background
+- Shared connections
+
+context_building:
+- Industry trends affecting them
+- Competitor analysis
+- Market position
+- Growth indicators
+- Challenge identification
+
+Output: Research Brief
+- Company overview (3-4 sentences)
+- Key decision makers (names, titles)
+- Likely pain points (based on industry/signals)
+- Personalization hooks (recent news, initiatives)
+- Suggested talking points
+- Qualification question strategy
+
+Implementation Guidance:
+
+1.​ Framework Configuration​
+
+○​ Select qualification framework
+○​ Customize questions per framework
+○​ Set scoring thresholds
+○​ Define qualification criteria
+2.​ Research Automation​
+
+○​ Web scraping for company data
+○​ LinkedIn profile extraction
+○​ News aggregation
+○​ Social listening
+○​ Competitive intelligence
+3.​ Brief Generation​
+
+○​ Synthesize research into brief
+○​ Highlight key talking points
+○​ Suggest personalization angles
+○​ Prioritize qualification questions
+
+Phase 4: Multi-Channel Engagement System
+Goal: Reach prospects through their preferred channels with personalized
+messaging.
+What to Build:
+4.1 Outreach Channel Orchestration
+Channel Priority Logic:
+For each lead, determine optimal channel mix:
+
+Decision Tree:
+
+1. Check data availability:
+- Email available? → Email sequence
+- Phone available? → Voice outreach
+- LinkedIn connection? → LinkedIn message
+- Multiple channels? → Multi-touch sequence
+
+2. Consider persona preferences:
+- C-level: Voice → LinkedIn → Email
+- VP-level: Email → LinkedIn → Voice
+- Manager-level: LinkedIn → Email → Voice
+- Technical: Email → LinkedIn
+
+3. Consider timing:
+- Business hours: Voice/LinkedIn
+- After hours: Email scheduled for morning
+- Weekends: Avoid or schedule Monday AM
+
+4. Consider engagement signals:
+- Website visitor: Email within 1 hour
+- Content download: Email within 24h
+- LinkedIn profile view: LinkedIn message within 48h
+
+4.2 Email Outreach System
+Email Sequence Builder:
+Sequence_Template:
+name: "Warm Outreach - SaaS VP Sales"
+
+email_1:
+timing: "Day 1, 9 AM local time"
+subject_line: "{{ personalization_hook }}"
+template: |
+
+Hi {{ first_name }},
+
+I noticed {{ company_name }} {{ recent_trigger_event }}.
+
+{{ value_prop_specific_to_their_role }}
+
+{{ social_proof }}
+
+Worth a quick chat to explore?
+
+{{ signature }}
+
+personalization_required:
+- company_name
+- first_name
+- recent_trigger_event
+- value_prop
+- social_proof
+
+call_to_action: "Schedule a call"
+
+email_2:
+timing: "Day 3, if no response to email 1"
+subject_line: "Re: {{ email_1_subject }}"
+template: |
+{{ first_name }},
+
+Quick follow-up on my message from {{ day }}.
+
+{{ additional_value_point }}
+
+{{ question_to_spark_interest }}
+
+{{ signature }}
+
+email_3:
+timing: "Day 7, if no response"
+type: "breakup_email"
+template: |
+{{ first_name }},
+
+I'll stop reaching out, but wanted to leave you with
+{{ valuable_resource }}.
+
+Feel free to reach out if {{ trigger_condition }}.
+
+{{ signature }}
+
+Personalization_Engines:
+trigger_event_examples:
+- "recently raised Series B"
+- "is hiring for a Head of Sales"
+- "just launched {{ product_name }}"
+- "was featured in {{ publication }}"
+
+value_prop_templates:
+by_role:
+VP_Sales: "help your team hit quota with less manual work"
+CRO: "drive predictable revenue growth"
+CEO: "scale your GTM without scaling headcount"
+
+social_proof_options:
+- "{{ similar_company }} saw 40% increase in pipeline"
+- "{{ competitor }} is using us to {{ outcome }}"
+- "{{ industry_leader }} achieved {{ metric }} in {{ timeframe }}"
+
+A/B_Testing:
+test_variables:
+- subject_lines (3 variants)
+- value_props (2 variants)
+- call_to_action (2 variants)
+- email_length (short vs. detailed)
+
+success_metrics:
+- open_rate
+- click_rate
+- reply_rate
+- meeting_book_rate
+
+optimization:
+- Auto-select winning variants
+- Retire losing variants
+- Test new variants weekly
+
+Email Generation Requirements:
+1.​ Personalization at Scale​
+
+○​ Company-specific references
+○​ Role-specific value props
+○​ Recent news/trigger events
+○​ Industry-specific language
+○​ Competitor mentions where relevant
+2.​ Quality Checks​
+
+○​ Grammar/spelling validation
+○​ Spam score checking
+○​ Link validation
+○​ Personalization tag filling
+
+○​ Deliverability optimization
+3.​ Compliance​
+
+○​ CAN-SPAM compliance
+○​ GDPR consent tracking
+○​ Unsubscribe handling
+○​ Email preference management
+4.3 Voice Agent System (ElevenLabs Integration)
+Goal: Create a natural-sounding AI voice agent for phone conversations.
+Voice Agent Architecture:
+Voice_Agent_Components:
+
+1. Speech-to-Text (Input):
+- ElevenLabs conversational AI
+- Real-time transcription
+- Accent/dialect handling
+- Background noise filtering
+
+2. Conversation Management:
+- Intent recognition
+- Context tracking
+- Turn-taking logic
+- Interruption handling
+
+3. Qualification Logic:
+- Question flow based on framework
+- Dynamic follow-ups
+- Objection handling
+- Information extraction
+
+4. Text-to-Speech (Output):
+
+- ElevenLabs voice synthesis
+- Natural prosody
+- Emotion/tone control
+- Speaking pace adjustment
+
+Voice_Conversation_Flow:
+
+introduction:
+script: |
+"Hi {{ first_name }}, this is Alex calling from {{ company_name }}.
+
+I'm reaching out because {{ personalized_reason }}.
+
+Do you have a quick minute?"
+
+handling:
+yes: → qualification_questions
+no: → offer_callback
+suspicious: → credibility_building
+
+qualification_questions:
+framework: "BANT" # or MEDDIC, CHAMP
+
+questions_flow:
+budget:
+question: "Are you currently allocating budget for {{ category }}?"
+follow_ups:
+- "What's your typical budget range for {{ category }}?"
+- "When does your next budget cycle start?"
+
+authority:
+question: "Who else would be involved in evaluating {{ product_type }}?"
+follow_ups:
+
+- "Would you be the primary decision maker?"
+- "What's your typical vendor evaluation process?"
+
+need:
+question: "What's your biggest challenge with {{ relevant_process }}?"
+follow_ups:
+- "How are you handling {{ problem }} today?"
+- "What would success look like for you?"
+
+timeline:
+question: "When are you looking to have a solution in place?"
+follow_ups:
+- "What's driving that timeline?"
+- "Any specific deadlines or events?"
+
+objection_handling:
+common_objections:
+"too_busy":
+response: |
+"I completely understand. That's actually why I'm calling {{ company_name }} helps {{ similar_companies }} save
+{{ time_saving }} on {{ process }}.
+
+Would {{ specific_day }} at {{ time }} work for a brief
+10-minute call?"
+
+"send_email":
+response: |
+"Happy to send you information. To make sure I send exactly
+what's relevant - quick question:
+
+{{ qualifying_question }}
+
+Based on that, I'll send over {{ specific_resource }}."
+
+"not_interested":
+response: |
+"No worries at all. Just curious - is it {{ reason_1 }},
+{{ reason_2 }}, or something else entirely?"
+
+discovery: "Extract why not interested for future learning"
+
+"current_solution":
+response: |
+"That's great that you have something in place. Are you
+seeing {{ common_gap }} or {{ common_limitation }}?
+
+Most companies we work with started with {{ competitor }}
+but found {{ unique_value_prop }}."
+
+meeting_booking:
+qualification_check:
+- All BANT criteria met OR
+- High-value lead (score > 150) OR
+- Strong interest expressed
+
+if_qualified:
+script: |
+"{{ first_name }}, based on what you've shared, I think it
+makes sense for you to speak with {{ sales_rep_name }} who
+specializes in {{ specific_area }}.
+
+I have {{ time_slot_1 }} or {{ time_slot_2 }} available
+{{ day }}. Which works better for you?"
+
+calendar_integration:
+
+- Check sales rep availability
+- Propose 2-3 time slots
+- Handle timezone conversion
+- Send calendar invite
+- Confirm meeting booked
+
+if_not_qualified:
+script: |
+"Thanks for your time {{ first_name }}. {{ nurture_action }}.
+
+Would it be okay if I check back in {{ timeframe }}?"
+
+call_ending:
+qualified_lead:
+- Confirm meeting details
+- Set expectations for meeting
+- Send confirmation email
+- Add to CRM
+
+not_qualified:
+- Thank them for time
+- Offer valuable resource
+- Set follow-up reminder
+- Note disqualification reason
+
+no_answer:
+- Leave voicemail
+- Send follow-up email
+- Schedule callback attempt
+
+Voice Agent Training:
+Conversation_Training:
+
+voice_characteristics:
+tone: "Professional, friendly, helpful"
+pace: "Moderate, 150-160 words per minute"
+emotion: "Warm introduction, enthusiastic about value, empathetic to concerns"
+personality: "Consultative, not pushy; curious, not interrogating"
+
+natural_language_elements:
+filler_words: "Minimal but natural (um, uh sparingly)"
+pauses: "Brief pauses after questions, before responses"
+acknowledgments: "mm-hmm, I see, that makes sense"
+mirroring: "Match prospect's energy and pace"
+
+conversation_intelligence:
+active_listening:
+- Acknowledge what they say
+- Ask clarifying questions
+- Summarize understanding
+- Build on their points
+
+context_retention:
+- Remember earlier conversation points
+- Reference previous answers
+- Build consistent narrative
+- Track conversation history
+
+emotional_intelligence:
+- Detect frustration → empathize
+- Detect confusion → clarify
+- Detect interest → advance conversation
+- Detect resistance → back off gracefully
+
+Quality_Metrics:
+
+conversation_quality:
+- Natural flow score (1-10)
+- Question clarity score
+- Objection handling effectiveness
+- Information extraction completeness
+- Call duration (target: 3-5 minutes)
+
+business_outcomes:
+- Qualification completion rate
+- Meeting booking rate
+- Qualification accuracy
+- Sales acceptance rate
+
+Implementation Guidance:
+1.​ ElevenLabs Integration​
+
+○​ Set up conversational AI
+○​ Configure voice characteristics
+○​ Implement real-time streaming
+○​ Handle latency optimization
+○​ Add conversation logging
+2.​ Call Flow State Machine​
+
+○​ Track conversation phase
+○​ Manage question progression
+○​ Handle interruptions gracefully
+○​ Support context switching
+○​ Enable conversation recovery
+3.​ Intelligence Layer​
+
+○​ Real-time intent classification
+○​ Entity extraction (dates, numbers, names)
+
+○​ Sentiment analysis
+○​ Qualification scoring during call
+○​ Dynamic response generation
+4.​ Testing & Quality​
+
+○​ Simulate various call scenarios
+○​ Test objection handling
+○​ Verify qualification accuracy
+○​ Measure conversation quality
+○​ A/B test different scripts
+
+✅ Success Criteria
+Your Enterprise Sales Agent must demonstrate:
+
+Core Functionality (40%)
+●​ [ ] ICP builder creates comprehensive profiles
+●​ [ ] Discovers 50+ leads per ICP in < 24 hours
+●​ [ ] Qualification framework properly implemented
+●​ [ ] Voice agent has natural conversations
+●​ [ ] Email sequences are personalized at scale
+●​ [ ] CRM integration works bidirectionally
+●​ [ ] Multi-channel orchestration functions
+
+Quality Metrics (30%)
+●​ [ ] ICP fit score accuracy > 80%
+●​ [ ] Contact data accuracy > 90%
+●​ [ ] Voice conversation quality > 4/5
+●​ [ ] Email personalization quality > 4/5
+●​ [ ] Qualification completion rate > 70%
+●​ [ ] Sales acceptance rate > 75%
+
+Performance (15%)
+●​ [ ] Lead discovery: < 5 minutes per lead
+●​ [ ] Voice calls: 3-5 minutes average
+●​ [ ] Email send: < 1 minute per email
+●​ [ ] CRM sync: Real-time (< 30 seconds)
+●​ [ ] System uptime: > 99%
+
+Business Outcomes (15%)
+●​ [ ] Meeting booking rate > 10%
+●​ [ ] Cost per qualified lead < $10
+●​ [ ] Sales team satisfaction > 4/5
+●​ [ ] ROI positive within a month
+
+📦 Deliverables
+1. Working System
+Required Components:
+enterprise-sales-agent/
+├── README.md (comprehensive setup guide)
+├── ARCHITECTURE.md (system design + diagrams)
+
+├── agent/
+│ ├── icp_builder/
+│ ├── discovery_engine/
+│ ├── qualification_system/
+│ ├── engagement_orchestrator/
+│ ├── voice_agent/
+│ └── crm_integration/
+├── config/
+│ ├── icp_templates/
+│ ├── qualification_frameworks/
+│ ├── email_templates/
+│ └── voice_scripts/
+├── data/
+│ ├── database_schema.sql
+│ └── sample_data/
+├── tests/
+│ ├── unit_tests/
+│ ├── integration_tests/
+│ └── end_to_end_tests/
+├── docs/
+│ ├── user_guide.md
+│ ├── admin_guide.md
+│ ├── api_documentation.md
+│ └── deployment_guide.md
+└── analytics/
+├── dashboard_config/
+└── reporting_templates/
+
+2. Architecture Documentation
+Must Include:
+1.​ System Architecture Diagram
+
+○​ Component relationships
+○​ Data flow
+○​ Integration points
+○​ Scalability design
+2.​ Sequence Diagrams
+○​ Lead discovery flow
+○​ Qualification conversation flow
+○​ Meeting booking flow
+○​ CRM sync flow
+3.​ Domain Model
+○​ Database schema
+○​ ER Diagram
+4.​ API Documentation
+○​ Endpoints
+○​ Request/response formats
+○​ Authentication
+○​ Rate limits
+
+3. Test Results
+Run comprehensive tests across scenarios:
+Test Scenario 1: SaaS ICP
+ICP_Profile:
+industry: "B2B SaaS"
+size: "50-200 employees"
+revenue: "$5M-$20M ARR"
+geography: "United States"
+tech_stack: ["Salesforce", "Intercom"]
+
+Expected_Results:
+- 50+ leads discovered
+- 30%+ qualification rate
+
+- 3+ meetings booked
+- Sample voice conversation transcript
+- Sample email sequence results
+- CRM records created
+
+Test Scenario 2: E-commerce ICP
+ICP_Profile:
+industry: "E-commerce"
+size: "20-100 employees"
+revenue: "$10M-$50M"
+geography: "North America"
+tech_stack: ["Shopify", "Klaviyo"]
+
+Expected_Results:
+- Similar metrics as Scenario 1
+- Different personalization approach
+- Industry-specific qualification
+
+Test Scenario 3: Multi-Channel Campaign
+Test_Case:
+- Same lead approached via email, voice, LinkedIn
+- Track channel effectiveness
+- Measure coordination
+- Compare conversion rates
+
+Expected_Results:
+- Channel performance comparison
+- Multi-touch attribution
+- Optimal sequence identified
+
+💡 Implementation Guide
+1: Foundation
+ICP Builder + Discovery
+●​ Build conversational ICP collector
+●​ Implement search query generation
+●​ Set up web scraping infrastructure
+●​ Create basic lead scoring
+Data Enrichment + Scoring
+●​ Integrate enrichment APIs
+●​ Build scoring algorithm
+●​ Create lead database schema
+●​ Test discovery pipeline
+
+2: Qualification
+Framework Selection
+●​ Implement BANT, MEDDIC, CHAMP
+●​ Build framework customization
+●​ Create scoring logic
+●​ Design qualification UI
+Research Engine
+●​ Automated company research
+●​ Contact enrichment
+●​ Brief generation
+●​ Personalization engine
+Integration Testing
+●​ End-to-end discovery → qualification
+
+●​ Data quality validation
+●​ Performance optimization
+●​ Bug fixes
+
+3: Engagement
+Email System
+●​ Template engine
+●​ Personalization at scale
+●​ Sequence management
+●​ Deliverability setup
+Voice Agent
+●​ ElevenLabs integration
+●​ Conversation flow
+●​ Qualification logic
+●​ Objection handling
+Multi-Channel Orchestration
+●​ Channel prioritization
+●​ Sequence coordination
+●​ Response handling
+●​ Unified inbox
+
+4: CRM & Analytics
+CRM Integration
+●​ Bidirectional sync
+●​ Deal creation
+●​ Briefing docs
+●​ Sales notifications
+Analytics & Learning
+
+●​ Performance dashboard
+●​ Feedback loops
+●​ A/B testing framework
+●​ Optimization engine
+
+Final Polish
+Testing & Quality
+●​ Comprehensive testing
+●​ Quality assurance
+●​ Performance tuning
+●​ Security review
+Documentation & Demo
+●​ Write documentation
+●​ Create demo videos
+●​ Build business case
+●​ Prepare submission
+
+🎯 Evaluation Rubric
+Criterion
+System Design
+
+Weight
+25%
+
+Requirements
+Scalable architecture, proper separation of
+concerns, production-ready
+
+Lead Discovery
+
+15%
+
+Finds quality leads, accurate scoring,
+comprehensive enrichment
+
+Qualification
+
+15%
+
+Framework implementation, conversation quality,
+data extraction
+
+Voice Agent
+
+15%
+
+Natural conversations, ElevenLabs integration,
+qualification accuracy
+
+CRM Integration
+
+10%
+
+Seamless sync, complete data transfer, sales team
+value
+
+Analytics &
+
+10%
+
+Learning
+Documentation
+
+Metrics tracking, feedback loops, continuous
+improvement
+
+10%
+
+Comprehensive, clear, professional
+
+Grading Scale
+●​ A (90-100%): Production-ready, ready to sell to customers
+●​ B (80-89%): Fully functional, minor improvements needed
+●​ C (70-79%): Core functionality works, gaps in quality
+●​ D (60-69%): Basic features, significant gaps
+●​ F (<60%): Incomplete or non-functional
+
+🚀 Bonus Challenges
+1. Advanced Voice Features
+●​ Emotion detection and response
+●​ Voice cloning for brand consistency
+●​ Multi-language support
+●​ Real-time translation
+
+2. Advanced Personalization
+●​ LinkedIn post analysis for talking points
+●​ News-jacking opportunities
+●​ Competitor intelligence integration
+●​ Account-based marketing coordination
+
+3. Team Collaboration
+●​ Multi-agent system (discovery, qualification, closing agents)
+●​ Sales rep collaboration features
+●​ Real-time coaching during calls
+●​ Team performance leaderboards
+
+4. Advanced Analytics
+●​ Predictive lead scoring with ML
+●​ Churn prediction
+●​ Deal forecasting
+●​ Attribution modeling
+
+5. Enterprise Features
+●​ SSO/SAML integration
+●​ Role-based access control
+●​ Audit logging
+●​ SOC 2 compliance prep
+●​ White-labeling
+
+📝 Reflection Questions
+After completing this project, document:
+1.​ Technical Decisions:
+○​ Why did you choose your tech stack?
+○​ What were the biggest technical challenges?
+○​ How did you handle scalability?
+○​ What would you do differently?
+2.​ Voice Agent:
+○​ How did you make conversations natural?
+
+○​ What was hardest about qualification logic?
+○​ How did you handle edge cases?
+○​ What improvements would you make?
+3.​ Business Viability:
+○​ Would you use this product?
+○​ What's the real ROI?
+○​ Who would buy this?
+○​ How would you sell it?
+
+📚 Resources
+Lead Discovery
+●​ Apollo.io API
+●​ Clearbit API
+●​ BuiltWith API
+●​ Hunter.io API
+
+Voice AI
+●​ ElevenLabs Conversational AI
+●​ ElevenLabs Voice Design
+●​ OpenAI Realtime API
+
+CRM Integration
+●​ HubSpot API
+●​ Salesforce API
+●​ Pipedrive API
+
+Sales Frameworks
+●​ BANT Framework Guide
+
+●​ MEDDIC Sales Process
+●​ CHAMP Sales Framework
+
+Analytics
+●​ Mixpanel
+●​ Posthog
+
+🎬 Getting Started
+1.​ Choose Your Focus
+○​ Full-stack implementation
+○​ OR deep dive into one component (voice, discovery, etc.)
+2.​ Start with ICP
+○​ This drives everything else
+○​ Get it right first
+3.​ Build Iteratively
+○​ Discovery → Qualification → Engagement → CRM
+○​ Test each phase thoroughly
+4.​ Test with Real Data
+○​ Use real company searches
+○​ Practice conversations yourself
+○​ Validate output quality
+
+
